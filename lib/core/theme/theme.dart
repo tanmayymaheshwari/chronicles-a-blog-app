@@ -13,7 +13,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppPallete.backgroundColor,
     inputDecorationTheme: InputDecorationTheme(
       enabledBorder: _border(),
-      focusedBorder: _border(AppPallete.gradient1),
+      focusedBorder: _border(AppPallete.gradient2),
       contentPadding: EdgeInsets.all(27),
     ),
   );

@@ -1,5 +1,5 @@
 import 'package:chronicles/core/theme/theme.dart';
-import 'package:chronicles/features/auth/presentation/pages/signup_page.dart';
+import 'package:chronicles/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Chronicles',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkThemeMode,
-      home: const SignUpPage(),
+      home: const LoginPage(),
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:chronicles/features/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthSupabaseDatasource {
+  Session? get currentUserSession;
+
   Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
@@ -15,12 +17,37 @@ abstract interface class AuthSupabaseDatasource {
     required String email,
     required String password,
   });
+
+  Future<UserModel?> getCurrentUserData();
 }
 
 class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
   final SupabaseClient supabaseClient;
 
   AuthSupabaseDatasourceImpl({required this.supabaseClient});
+
+  @override
+  Session? get currentUserSession => supabaseClient.auth.currentSession;
+
+  @override
+  Future<UserModel?> getCurrentUserData() async {
+    try {
+      if (currentUserSession != null) {
+        final userData = await supabaseClient.from('profiles').select().eq(
+              'id',
+              currentUserSession!.user.id,
+            ); // 'from' directly connects to the database
+        return UserModel.fromJson(userData.first).copyWith(
+          email: currentUserSession!.user.email,
+          // since email is not stored in the database
+        );
+      }
+      return null;
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
   @override
   Future<UserModel> loginWithEmailPassword({
     required String email,
@@ -35,7 +62,10 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
       if (response.user == null) {
         throw ServerException(message: "User is null!");
       }
-      return UserModel.fromJson(response.user!.toJson());
+      // return UserModel.fromJson(response.user!.toJson());
+      return UserModel.fromJson(response.user!.toJson()).copyWith(
+          email: currentUserSession!.user.email,
+      );
     } catch (e) {
       log(e.toString());
       throw ServerException(message: "User is null");
@@ -57,7 +87,10 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
       if (response.user == null) {
         throw ServerException(message: "User is null");
       }
-      return UserModel.fromJson(response.user!.toJson());
+      // return UserModel.fromJson(response.user!.toJson());
+      return UserModel.fromJson(response.user!.toJson()).copyWith(
+          email: currentUserSession!.user.email,
+      );
     } catch (e) {
       log(e.toString());
       throw ServerException(message: "User is null");

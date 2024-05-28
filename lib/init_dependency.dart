@@ -2,6 +2,7 @@ import 'package:chronicles/core/secrets/app_secrets.dart';
 import 'package:chronicles/features/auth/data/datasources/auth_supabase_datasource.dart';
 import 'package:chronicles/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:chronicles/features/auth/domain/repository/auth_repository.dart';
+import 'package:chronicles/features/auth/domain/usecases/current_user.dart';
 import 'package:chronicles/features/auth/domain/usecases/user_login.dart';
 import 'package:chronicles/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:chronicles/features/auth/presentation/bloc/auth_bloc.dart';
@@ -24,30 +25,53 @@ void _initAuth() {
   // does not know that AuthSupaImpl is an implementation of
   // AuthSupaData, which is required in AuthRepoImpl
 
-  serviceLocator.registerFactory<AuthSupabaseDatasource>(
-    () => AuthSupabaseDatasourceImpl(
-      supabaseClient: serviceLocator(),
-    ),
-  );
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(
-      remoteDatasource: serviceLocator(),
-    ),
-  );
-  serviceLocator.registerFactory(
-    () => UserSignUp(
-      authRepository: serviceLocator(),
-    ),
-  );
-  serviceLocator.registerFactory(
-    () => UserLogin(
-      authRepository: serviceLocator(),
-    ),
-  );
-  serviceLocator.registerLazySingleton(
-    () => AuthBloc(
-      userSignUp: serviceLocator(),
-      userLogin: serviceLocator(),
-    ),
-  );
+  serviceLocator
+    ..registerFactory<AuthSupabaseDatasource>(
+      () => AuthSupabaseDatasourceImpl(
+        supabaseClient: serviceLocator(),
+      ),
+    )
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(
+        remoteDatasource: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => UserSignUp(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => UserLogin(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => CurrentUser(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton(
+      () => AuthBloc(
+        userSignUp: serviceLocator(),
+        userLogin: serviceLocator(),
+        currentUser: serviceLocator(),
+      ),
+    );
 }
+
+//   serviceLocator.registerFactory<AuthSupabaseDatasource>(
+//     () => AuthSupabaseDatasourceImpl(
+//       supabaseClient: serviceLocator(),
+//     ),
+//   );
+//   serviceLocator.registerFactory<AuthRepository>(
+//     () => AuthRepositoryImpl(
+//       remoteDatasource: serviceLocator(),
+//     ),
+//   );
+//   serviceLocator.registerFactory(
+//     () => UserSignUp(
+//       authRepository: serviceLocator(),
+//     ),
+//   );

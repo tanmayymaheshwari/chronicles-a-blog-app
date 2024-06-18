@@ -41,12 +41,12 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: const EdgeInsets.all(15.0),
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state is AuthFailureState) {
+            if (state is AuthFailure) {
               return showSnackBar(context, state.message);
             }
           },
           builder: (context, state) {
-            if (state is AuthLoadingState) {
+            if (state is AuthLoading) {
               return const Loader();
             }
             return Form(
@@ -83,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         context.read<AuthBloc>().add(
-                              AuthSignUpEvent(
+                              AuthSignUp(
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim(),
                                 name: nameController.text.trim(),

@@ -1,5 +1,6 @@
+import 'package:chronicles/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:chronicles/core/usecase/usecase.dart';
-import 'package:chronicles/features/auth/domain/entities/user.dart';
+import 'package:chronicles/core/common/entities/user.dart';
 import 'package:chronicles/features/auth/domain/usecases/current_user.dart';
 import 'package:chronicles/features/auth/domain/usecases/user_login.dart';
 import 'package:chronicles/features/auth/domain/usecases/user_sign_up.dart';
@@ -13,66 +14,75 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserSignUp _userSignUp;
   final UserLogin _userLogin;
   final CurrentUser _currentUser;
+  final AppUserCubit _appUserCubit;
   AuthBloc({
     required UserSignUp userSignUp,
     required UserLogin userLogin,
     required CurrentUser currentUser,
+    required AppUserCubit appUserCubit,
   })  : _userSignUp = userSignUp,
         _userLogin = userLogin,
         _currentUser = currentUser,
-        // Initializer List
+        _appUserCubit = appUserCubit,
         super(AuthInitial()) {
-    on<AuthSignUpEvent>(_onAuthSignUpEvent);
-    on<AuthLoginEvent>(_onAuthLoginEvent);
-    on<AuthIsUserLoggedInEvent>(_onAuthIsUserLoggedInEvent);
+    on<AuthEvent>((_, emit) => emit(AuthLoading()));
+    on<AuthSignUp>(_onAuthSignUp);
+    on<AuthLogin>(_onAuthLogin);
+    on<AuthIsUserLoggedIn>(_isUserLoggedIn);
   }
 
-  void _onAuthIsUserLoggedInEvent(
-    AuthIsUserLoggedInEvent event,
+  void _isUserLoggedIn(
+    AuthIsUserLoggedIn event,
     Emitter<AuthState> emit,
   ) async {
-    final response = await _currentUser(
-      NoParams(),
-    );
-    response.fold(
-      (failure) => emit(AuthFailureState(message: failure.message)),
-      (success) => print(success.email),
+    final res = await _currentUser(NoParams());
+
+    res.fold(
+      (l) => emit(AuthFailure(l.message)),
+      (r) => _emitAuthSuccess(r, emit),
     );
   }
 
-  void _onAuthSignUpEvent(
-    AuthSignUpEvent event,
+  void _onAuthSignUp(
+    AuthSignUp event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoadingState());
-    final response = await _userSignUp(
+    final res = await _userSignUp(
       UserSignUpParam(
         email: event.email,
-        name: event.name,
         password: event.password,
+        name: event.name,
       ),
     );
-    response.fold(
-      (failure) => emit(AuthFailureState(message: failure.message)),
-      (success) => emit(AuthSuccessState(user: success)),
+
+    res.fold(
+      (failure) => emit(AuthFailure(failure.message)),
+      (user) => _emitAuthSuccess(user, emit),
     );
   }
 
-  void _onAuthLoginEvent(
-    AuthLoginEvent event,
+  void _onAuthLogin(
+    AuthLogin event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoadingState());
-    final response = await _userLogin(
+    final res = await _userLogin(
       UserLoginParams(
         email: event.email,
         password: event.password,
       ),
     );
 
-    response.fold(
-      (failure) => emit(AuthFailureState(message: failure.message)),
-      (success) => emit(AuthSuccessState(user: success)),
+    res.fold(
+      (l) => emit(AuthFailure(l.message)),
+      (r) => _emitAuthSuccess(r, emit),
     );
+  }
+
+  void _emitAuthSuccess(
+    User user,
+    Emitter<AuthState> emit,
+  ) {
+    _appUserCubit.updateUser(user);
+    emit(AuthSuccess(user));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:chronicles/core/error/exceptions.dart';
 import 'package:chronicles/core/error/failure.dart';
 import 'package:chronicles/features/auth/data/datasources/auth_supabase_datasource.dart';
-import 'package:chronicles/features/auth/domain/entities/user.dart';
+import 'package:chronicles/core/common/entities/user.dart';
 import 'package:chronicles/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;

@@ -1,4 +1,4 @@
-import 'package:chronicles/features/auth/domain/entities/user.dart';
+import 'package:chronicles/core/common/entities/user.dart';
 
 class UserModel extends User {
   UserModel({

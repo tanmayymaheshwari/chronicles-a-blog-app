@@ -1,8 +1,8 @@
-import 'package:chronicles/core/error/failure.dart';
+import 'package:chronicles/core/error/failures.dart';
 import 'package:fpdart/fpdart.dart';
 
-abstract interface class Usecase<SuccessType, Params> {
-  Future<Either<Failure, SuccessType>>  call(Params params);
+abstract interface class UseCase<SuccessType, Params> {
+  Future<Either<Failure, SuccessType>> call(Params params);
 }
 
 class NoParams {}

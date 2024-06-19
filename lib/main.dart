@@ -4,7 +4,7 @@ import 'package:chronicles/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chronicles/features/auth/presentation/pages/login_page.dart';
 import 'package:chronicles/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:chronicles/features/blog/presentation/pages/blog_page.dart';
-import 'package:chronicles/init_dependency.dart';
+import 'package:chronicles/init_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

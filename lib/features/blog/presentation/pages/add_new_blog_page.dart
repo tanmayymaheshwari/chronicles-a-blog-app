@@ -1,17 +1,15 @@
 import 'dart:io';
-
-import 'package:blog_app/core/common/cubits/app_user/app_user_cubit.dart';
-import 'package:blog_app/core/common/widgets/loader.dart';
-import 'package:blog_app/core/constants/constants.dart';
-import 'package:blog_app/core/theme/app_pallete.dart';
-import 'package:blog_app/core/utils/pick_image.dart';
-import 'package:blog_app/core/utils/show_snackbar.dart';
-import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
-import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
-import 'package:blog_app/features/blog/presentation/widgets/blog_editor.dart';
+import 'package:chronicles/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:chronicles/core/common/widgets/loader.dart';
+import 'package:chronicles/core/constants/constants.dart';
+import 'package:chronicles/core/theme/app_pallete.dart';
+import 'package:chronicles/core/utils/pick_image.dart';
+import 'package:chronicles/core/utils/show_snackbar.dart';
+import '../bloc/blog_bloc.dart';
+import 'blog_page.dart';
+import '../widgets/blog_editor.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewBlogPage extends StatefulWidget {
@@ -169,12 +167,14 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                                   child: Chip(
                                     label: Text(e),
                                     color: selectedTopics.contains(e)
-                                        ? const MaterialStatePropertyAll(
+                                        ? const WidgetStatePropertyAll(
                                             AppPallete.gradient1,
                                           )
                                         : null,
                                     side: selectedTopics.contains(e)
-                                        ? null
+                                        ? const BorderSide(
+                                            color: Colors.transparent,
+                                          )
                                         : const BorderSide(
                                             color: AppPallete.borderColor,
                                           ),

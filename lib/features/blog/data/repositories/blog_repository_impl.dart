@@ -1,13 +1,13 @@
 import 'dart:io';
-import 'package:blog_app/core/constants/constants.dart';
-import 'package:blog_app/core/error/exceptions.dart';
-import 'package:blog_app/core/error/failures.dart';
-import 'package:blog_app/core/network/connection_checker.dart';
-import 'package:blog_app/features/blog/data/datasources/blog_local_data_source.dart';
-import 'package:blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
-import 'package:blog_app/features/blog/data/models/blog_model.dart';
-import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/domain/repositories/blog_repository.dart';
+import 'package:chronicles/core/constants/constants.dart';
+import 'package:chronicles/core/error/exceptions.dart';
+import 'package:chronicles/core/error/failures.dart';
+import 'package:chronicles/core/network/connection_checker.dart';
+import '../datasources/blog_local_data_source.dart';
+import '../datasources/blog_remote_data_source.dart';
+import '../models/blog_model.dart';
+import '../../domain/entities/blog.dart';
+import '../../domain/repositories/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 

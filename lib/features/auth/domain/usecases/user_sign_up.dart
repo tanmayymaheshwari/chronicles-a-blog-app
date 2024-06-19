@@ -1,12 +1,12 @@
-import 'package:chronicles/core/error/failure.dart';
+import 'package:chronicles/core/error/failures.dart';
 import 'package:chronicles/core/usecase/usecase.dart';
 import 'package:chronicles/core/common/entities/user.dart';
 import 'package:chronicles/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UserSignUp implements Usecase<User, UserSignUpParam> {
+class UserSignUp implements UseCase<User, UserSignUpParam> {
   final AuthRepository authRepository;
-  UserSignUp({required this.authRepository});
+  UserSignUp(this.authRepository);
 
   @override
   Future<Either<Failure, User>> call(UserSignUpParam params) async {

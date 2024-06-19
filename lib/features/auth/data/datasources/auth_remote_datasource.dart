@@ -4,7 +4,7 @@ import 'package:chronicles/core/error/exceptions.dart';
 import 'package:chronicles/features/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract interface class AuthSupabaseDatasource {
+abstract interface class AuthRemoteDatasource {
   Session? get currentUserSession;
 
   Future<UserModel> signUpWithEmailPassword({
@@ -21,10 +21,10 @@ abstract interface class AuthSupabaseDatasource {
   Future<UserModel?> getCurrentUserData();
 }
 
-class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
+class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   final SupabaseClient supabaseClient;
 
-  AuthSupabaseDatasourceImpl({required this.supabaseClient});
+  AuthRemoteDatasourceImpl({required this.supabaseClient});
 
   @override
   Session? get currentUserSession => supabaseClient.auth.currentSession;
@@ -44,7 +44,7 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
       }
       return null;
     } catch (e) {
-      throw ServerException(message: e.toString());
+      throw ServerException(e.toString());
     }
   }
 
@@ -60,7 +60,7 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
         password: password,
       );
       if (response.user == null) {
-        throw ServerException(message: "User is null!");
+        throw ServerException("User is null!");
       }
       // return UserModel.fromJson(response.user!.toJson());
       return UserModel.fromJson(response.user!.toJson()).copyWith(
@@ -68,7 +68,7 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
       );
     } catch (e) {
       log(e.toString());
-      throw ServerException(message: "User is null");
+      throw ServerException("User is null");
     }
   }
 
@@ -85,7 +85,7 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
         data: {'name': name},
       );
       if (response.user == null) {
-        throw ServerException(message: "User is null");
+        throw ServerException("User is null");
       }
       // return UserModel.fromJson(response.user!.toJson());
       return UserModel.fromJson(response.user!.toJson()).copyWith(
@@ -93,7 +93,7 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
       );
     } catch (e) {
       log(e.toString());
-      throw ServerException(message: "User is null");
+      throw ServerException("User is null");
     }
   }
 }
